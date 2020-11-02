@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Platform Budget Plots</title>
+        
+        <!-- Required meta tags -->
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.css">
+        
+        <style>
+            body {
+    
+                width: 1300px;
+                padding: 20px;
+                margin:0 auto;
+                font-size:10pt;
+                color: #333;
+            }
+            .title_head {
+                background-color: #BEF781;
+                padding: 5px;
+                text-align: center;
+                font-size: 28px;
+                font-weight: 10;
+            }
+            
+			div.fixed-row {
+				width: 1300px;
+			} 
+			
+            div.half-plot {
+                width: 600px;
+                height: 500px;
+            }
+            div.full-plot {
+                width: 1300px;
+                height: 800px;
+            }
+            div.square-plot {
+                width: 900px;
+                height: 700px;
+                margin: 0 auto;
+            }
+            p.plot-name {
+                text-align: center;
+                text-decoration: underline;
+                font-size: 25px;
+            }
+        </style>
+
+    <script src="https://cdn.plot.ly/plotly-latest.js"></script>
+    <script>
+        window.onload = updatePage;
+		
+		// Plotly mode bar config for Pie
+        var plotlyConfigPie = {
+            displayModeBar: true,
+            modeBarButtonsToRemove: [
+                'sendDataToCloud',
+                'zoom2d', 'pan2d',
+                'select2d', 'lasso2d',
+                'zoomIn2d', 'zoomOut2d',
+                'autoScale2d', 'resetScale2d',
+                'toggleSpikelines',
+				'hoverClosestCartesian',
+				'hoverCompareCartesian'
+            ],
+			/*modeBarButtonsToAdd: [{
+			    name: 'Download PNG Image',
+			    icon: Plotly.Icons.camera,
+			    click: function(gd) {
+			      Plotly.downloadImage(gd, {format: 'png', width:1009, height:950, scale:5})
+			    }
+			  }]*/
+        };
+		
+		// Main caller function to generate the plots
+        function updatePage(){
+
+			// Bioinformatics 2020
+			makePieChart("bioinfo-today",
+                         ['VR', 'Scilifelab', 'KAW', 'University', 'Other', 'Vinnova'],
+                         [21.8, 21.5, 18.0, 15.8, 4.3, 2.9],
+                         ['VR<br>21.8', 'Scilifelab<br>21.5', 'KAW<br>18.0', 'University<br>15.8', 'Other<br>4.3', 'Vinnova<br>2.9'],
+                         'Bioinformatics budget 2020',
+                         {});
+            
+            // Bioinformatics 2021 - 2024
+            makePieChart("bioinfo-future",
+                         ['Scilifelab', 'VR', 'University', 'KAW', 'Other', 'Vinnova'],
+                         [34.6, 20.8, 17.8, 17.0, 10.3, 0.2],
+                         ['Scilifelab<br>34.6', 'VR<br>20.8', 'University<br>17.8', 'KAW<br>17.0', 'Other<br>10.3', 'Vinnova<br>0.2'],
+                         'Bioinformatics budget 2021 to 2024',
+                         {})
+            
+            // Cellular and Molecular Biology 2020
+            makePieChart("cell-mole-today",
+                         ['KAW', 'University', 'SciLifeLab', 'Other', 'VR'],
+                         [19.6, 22.3, 15.7, 19.1, 8.7],
+                         ['KAW<br>19.6', 'University<br>22.3', 'SciLifeLab<br>15.7', 'Other<br>19.1', 'VR<br>8.7'],
+                         'Cellular and Molecular Imaging 2020',
+                         {})
+            
+            // Cellular and Molecular Biology 2021 - 2024
+            makePieChart("cell-mole-future",
+                         ['SciLifeLab', 'University', 'KAW', 'VR', 'Other'],
+                         [33.8, 21.5, 15.8, 7.7, 8.5],
+                         ['SciLifeLab<br>33.8', 'University<br>21.5', 'KAW<br>15.8', 'VR<br>7.7', 'Other<br>8.5'],
+                         'Cellular and Molecular Imaging 2021 to 2024',
+                         {})
+            
+            // Chemical Biology and Genome 2020
+            makePieChart("chem-bio-today",
+                         ['SciLifeLab', 'University', 'Other', 'VR'],
+                         [13.2, 10.7, 4.0, 2.8],
+                         ['SciLifeLab<br>13.2', 'University<br>10.7', 'Other<br>4.0', 'VR<br>2.8'],
+                         'Chemical Biology and Genome Eng budget 2020',
+                         {})
+                         
+            // Chemical Biology and Genome 2021 - 2024
+            makePieChart("chem-bio-future",
+                         ['SciLifeLab', 'University', 'VR', 'Other'],
+                         [25.0, 9.9, 5.1, 2.2],
+                         ['SciLifeLab<br>25.0', 'University<br>9.9', 'VR<br>5.1', 'Other<br>2.2'],
+                         'Checmical Biology and Genome Eng budget 2021 to 2024',
+                         {})
+                         
+            // Diagnostics Development 2020
+            makePieChart("diag-today",
+                         ['Healthcare', 'SciLifeLab', 'University', 'Other', 'Vinnova'],
+                         [29.2, 13.6, 12.2, 14.0, 7.9],
+                         ['Healthcare<br>29.2', 'SciLifeLab<br>13.6', 'University<br>12.2', 'Other<br>14.0', 'Vinnova<br>7.9'],
+                         'Diagnostics Development budget 2020',
+                         {})
+			
+            // Diagnostics Development 2021 - 2024
+            makePieChart("diag-future",
+                         ['Healthcare', 'SciLifeLab', 'University', 'Other', 'Vinnova'],
+                         [28.8, 23.1, 10.2, 9.5, 0.2],
+                         ['Healthcare<br>28.8', 'SciLifeLab<br>23.1', 'University<br>10.2', 'Other<br>9.5', 'Vinnova<br>0.2'],
+                         'Diagnostics Development budget 2021 to 2024',
+                         {})
+            
+            // Drug Discovery 2020
+            makePieChart("ddd-today",
+                         ['SciLifeLab DDD', 'SciLifeLab DDD Surplus 2013', 'University'],
+                         [46.6, 13.3, 2.1],
+                         ['SciLifeLab DDD<br>46.6', 'SciLifeLab DDD<br>Surplus 2013<br>13.3', 'University<br>2.1'],
+                         'Drug Discovery and Development budget 2020',
+                         {})
+                         
+            // Drug Discovery 2021 - 2024
+            makePieChart("ddd-future",
+                         ['SciLifeLab DDD', 'Other', 'SciLifeLab DDD Surplus 2013', 'University'],
+                         [56.6, 7.9, 4.0, 2.0],
+                         ['SciLifeLab DDD<br>56.6', 'Other<br>7.9', 'SciLifeLab DDD<br>Surplus 2013<br>4.0', 'University<br>2.0'],
+                         'Drug Discovery and Development budget 2021 to 2024',
+                         {})
+            
+            // Genomics 2020
+            makePieChart("geno-today",
+                         ['SciLifeLab', 'VR', 'University', 'Other', 'KAW'],
+                         [54.7, 16.3, 10.7, 4.3, 2.0],
+                         ['SciLifeLab<br>54.7', 'VR<br>16.3', 'University<br>10.7', 'Other<br>4.3', 'KAW<br>2.0'],
+                         'Genomics budget 2020',
+                         {})
+                         
+            // Genomics 2021 - 2024
+            makePieChart("geno-future",
+                         ['SciLifeLab', 'VR', 'University', 'Other', 'KAW'],
+                         [69.9, 20.0, 13.5, 2.7, 1.0],
+                         ['SciLifeLab<br>69.9', 'VR<br>20.0', 'University<br>13.5', 'Other<br>2.7', 'KAW<br>1.0'],
+                         'Genomics budget 2021 to 2024',
+                         {})
+            
+            // Proteomics and Metabolomics 2020
+            makePieChart("prometa-today",
+                         ['SciLifeLab', 'University', 'Health care', 'VR', 'KAW', 'Other'],
+                         [22.6, 13.3, 3.7, 13.4, 7.0, 2.5],
+                         ['SciLifeLab<br>22.6', 'University<br>13.3', 'Health care<br>3.7', 'VR<br>13.4', 'KAW<br>7.0', 'Other<br>2.5'],
+                         'Proteomics and Metabolomics budget 2020',
+                         {})
+                         
+            // Proteomics and Metabolomics 2021 -2024
+            makePieChart("prometa-future",
+                         ['SciLifeLab', 'VR', 'University', 'Health care', 'Other', 'KAW'],
+                         [38.7, 13.4, 14.1, 3.8, 2.7, 5.0],
+                         ['SciLifeLab<br>38.7', 'VR<br>13.4', 'University<br>14.1', 'Health care<br>3.8', 'Other<br>2.7', 'KAW<br>5.0'],
+                         'Proteomics and Metabolomics budget 2021 to 2024',
+                         {})
+            
+            // NMR Structural biology 2020
+            makePieChart("nmr-today",
+                         ['KAW', 'University', 'SciLifeLab', 'VR'],
+                         [7.2, 7.2, 3.0, 0.2],
+                         ['KAW<br>7.2', 'University<br>7.2', 'SciLifeLab<br>3.0', 'VR<br>0.2'],
+                         'NMR Structural Biology budget 2020',
+                         {})
+                         
+            // NMR Structural biology 2021 -2024
+            makePieChart("nmr-future",
+                         ['University', 'SciLifeLab', 'KAW', 'VR'],
+                         [9.6, 4.0, 0.9, 0.2],
+                         ['University<br>9.6', 'SciLifeLab<br>4.0', 'KAW<br>0.9', 'VR<br>0.2'],
+                         'NMR Structural Biology budget 2021 to 2024',
+                         {})
+		
+        };
+        
+	    /*
+		PLOTING FUNCTIONS
+		*/
+		
+        // Function to make pie charts
+        function makePieChart(divID, labArray, valArray, textArray, fName='new_plot', uData=null){
+			//var pieCol = ["#1E3F32", "#01646B", "#4f9b74", "#80C41C", "#1b918d", "378CAF", "#468365", "#AECE53", "#87B0AB", "#AEC69C", "#819e90", "#B1B0B1"];
+			var pieCol = {'SciLifeLab DDD Surplus 2013': "#AECE53", 'SciLifeLab DDD': "#468365", 'Other': "#87B0AB", 'Vinnova': "378CAF", 
+                          'VR': "#01646B", 'University': "#819e90", 'Health care': "#1b918d", 'KAW': "#4f9b74", 'Health Care': "#1b918d", 
+                          'Scilifelab': "#80C41C", 'SciLifeLab': "#80C41C"}
+                          
+            var data = [{
+                values: valArray,
+                labels: labArray,
+                type: "pie",
+                text: textArray,
+                textposition: "outside",
+                textinfo: "text",
+				outsidetextfont: {family: "Arial", size:35},
+                hoverinfo: "none",
+				domain: {x:[0.18, 0.82], y:[0.05, 0.95]},
+				hole: 0.70,
+                sort: true,
+                direction: "clockwise",
+                automargin: true,
+				marker: {colors: labArray.map(x => pieCol[x])}
+            }];
+            
+            //Update or overwrite propperties if required
+            if (uData !== null)
+                for (var prop in uData){
+                    data[0][prop] = uData[prop]
+                }
+            
+            var layout = {
+                /*title: {
+					text: titleString,
+					font: {family: "Arial", size: 26},
+					x: 0.47,
+					y: 0.93
+				},*/
+				showlegend: false
+//				legend: {
+//					y: 0.83,
+//					orientation: "h"
+//				}
+            };
+            
+            Plotly.newPlot(divID, data, layout, Object.assign({toImageButtonOptions: { format: 'png', filename: fName, height: 959, width: 950, scale: 3}}, plotlyConfigPie));
+        };
+		
+    </script>
+    </head>
+    
+    <body>
+        <div>
+            <p class="title_head">Budget for bioinformatics 2020</p>
+            <br>
+		    <div id="bioinfo-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for bioinformatics 2021 - 2024</p>
+            <br>
+		    <div id="bioinfo-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Cellular and Molecular Imaging 2020</p>
+            <br>
+		    <div id="cell-mole-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Cellular and Molecular Imaging 2021 - 2024</p>
+            <br>
+		    <div id="cell-mole-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Chemical Biology and Genome Engineering 2020</p>
+            <br>
+		    <div id="chem-bio-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Chemical Biology and Genome Engineering 2021 - 2024</p>
+            <br>
+		    <div id="chem-bio-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Diagnostics Development 2020</p>
+            <br>
+		    <div id="diag-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Diagnostics Development 2021 - 2024</p>
+            <br>
+		    <div id="diag-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Drug Discovery and Development 2020</p>
+            <br>
+		    <div id="ddd-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Drug Discovery and Development 2021 - 2024</p>
+            <br>
+		    <div id="ddd-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Genomics 2020</p>
+            <br>
+		    <div id="geno-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Genomics 2021 - 2024</p>
+            <br>
+		    <div id="geno-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Proteomics and Metabolomics 2020</p>
+            <br>
+		    <div id="prometa-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for Proteomics and Metabolomics 2021 - 2024</p>
+            <br>
+		    <div id="prometa-future" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for NMR Structural Biology 2020</p>
+            <br>
+		    <div id="nmr-today" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Budget for NMR Structural Biology 2021 - 2024</p>
+            <br>
+		    <div id="nmr-future" class="square-plot"></div>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.js"></script>
+               
+    </body>
+</html>

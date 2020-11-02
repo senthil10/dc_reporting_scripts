@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Donut Plots</title>
+        
+        <!-- Required meta tags -->
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.css">
+        
+        <style>
+            body {
+    
+                width: 1300px;
+                padding: 20px;
+                margin:0 auto;
+                font-size:10pt;
+                color: #333;
+            }
+            .title_head {
+                background-color: #BEF781;
+                padding: 5px;
+                text-align: center;
+                font-size: 28px;
+                font-weight: 10;
+            }
+            
+			div.fixed-row {
+				width: 1300px;
+			} 
+			
+            div.half-plot {
+                width: 600px;
+                height: 500px;
+            }
+            div.full-plot {
+                width: 1300px;
+                height: 800px;
+            }
+            div.square-plot {
+                width: 900px;
+                height: 700px;
+                margin: 0 auto;
+            }
+            p.plot-name {
+                text-align: center;
+                text-decoration: underline;
+                font-size: 25px;
+            }
+        </style>
+
+    <script src="https://cdn.plot.ly/plotly-latest.js"></script>
+    <script>
+        window.onload = updatePage;
+		
+		// Plotly mode bar config for Pie
+        var plotlyConfigPie = {
+            displayModeBar: true,
+            modeBarButtonsToRemove: [
+                'sendDataToCloud',
+                'zoom2d', 'pan2d',
+                'select2d', 'lasso2d',
+                'zoomIn2d', 'zoomOut2d',
+                'autoScale2d', 'resetScale2d',
+                'toggleSpikelines',
+				'hoverClosestCartesian',
+				'hoverCompareCartesian'
+            ]/*,
+			modeBarButtonsToAdd: [{
+			    name: 'Download PNG Image',
+			    icon: Plotly.Icons.camera,
+			    click: function(gd) {
+			      Plotly.downloadImage(gd, {format: 'png', width:1009, height:950, scale:5})
+			    }
+			  }]*/
+        };
+		
+		// Main caller function to generate the plots
+        function updatePage(){
+
+			// Make National fund pie
+			var NatFundArr = ['Platforms', 'Site costs, Campus Solna & Navet', 'Research community', 'Joint SciLifeLab Initiatives ', 'Support functions', 'Management ', 'Collaborations & External Relations', 'Training and courses', 'Data Centre'];
+			var NatFundVal = [192,11,14,14,13,7,7,1,4];
+			var NatFundTxt = ['Platforms<br>192', 'Site costs, Campus Solna & Navet<br>11', 'Research community<br>14', 'Joint SciLifeLab Initiatives <br>14', 'Support functions<br>13', 'Management <br>7', 'Collaborations & External Relations<br>7', 'Training and courses<br>1', 'Data Centre<br>4'];
+            var NatFundDat = {
+                             domain: {x:[0.385, 0.915], y:[0.1, 0.9]},
+                             outsidetextfont: {family: "Arial", size:30}
+                             }
+			makePieChart("national-fund-pie", NatFundArr, NatFundVal, NatFundTxt, NatFundDat, "Figure 4a. Distribution of National Funding");
+            
+			// Make University fund pie
+			var UniFundArr = ['UU', 'KI', 'KTH', 'SU', 'UmU', 'GU', 'Chalmers', 'SLU', 'LU', 'LiU'];
+			var UniFundVal = [68, 55, 53, 19, 7, 6, 5, 5, 3, 2];
+			//var UniFundTxt = ['UU<br>68', 'KI<br>55', 'KTH<br>53', 'SU<br>19', 'UmU<br>7', 'GU<br>6', 'Chalmers<br>5', 'SLU<br>5', 'LU<br>3', 'LiU<br>2'];
+            var UniFundTxt = ['UU (68)', 'KI (55)', 'KTH (53)', 'SU (19)', 'UmU (7)', 'GU (6)', 'Chalmers (5)', 'SLU (5)', 'LU (3)', 'LiU (2)']
+            var UniFundDat = {
+                             domain: {x:[0.17, 0.83], y:[0.1, 0.9]},
+                             outsidetextfont: {family: "Arial", size:35}
+                             };
+			makePieChart("university-fund-pie", UniFundArr, UniFundVal, UniFundTxt, UniFundDat, "Figure 4b. Allocation of national funding to Swedish university.png");
+            
+			// Make platform fund pie
+			var PltFundArr = ['Genomics', 'Drug Discovery and Development', 'Proteomics and Metabolomics', 'Cellular and Molecular Imaging', 'Bioinformatics', 'Diagnostics Development', 'Chemical Biology and Genome Engineering'];
+			var PltFundVal = [55, 48, 24, 22, 19, 14, 11];
+			var PltFundTxt = ['Genomics<br>55', 'Drug Discovery<br>and Development<br>48', 'Proteomics and<br>Metabolomics<br>24', 'Cellular and<br>Molecular Imaging<br>22', 'Bioinformatics<br>19', 'Diagnostics Development<br>14', 'Chemical Biology and<br>Genome Engineering<br>11'];
+            var PltFundDat = {
+                             domain: {x:[0.21, 0.81], y:[0.1, 1]},
+                             outsidetextfont: {family: "Arial", size:31}
+                             };
+			makePieChart("platform-fund-pie", PltFundArr, PltFundVal, PltFundTxt, PltFundDat, "Figure 5. Distribution of national and DDD funding");
+            
+			// Make Infrastructure fund pie
+			var InfFundArr = ["SciLifeLab", "KAW", "University", "VR", "Other", "Healthcare"];
+			var InfFundVal = [192, 60, 57, 47, 25, 23];
+			var InfFundTxt = ["SciLifeLab<br>192", "KAW<br>60", "University<br>57", "VR<br>47", "Other<br>25", "Healthcare<br>23"];
+            var InfFundDat = {
+                             outsidetextfont: {family: "Arial", size:33}
+                             };
+			makePieChart("infra-fund-pie", InfFundArr, InfFundVal, InfFundTxt, InfFundDat, "Figure X. Total funding of the infrastructure in 2019");
+            
+			// Make academic users pie
+			var AcaUsrArr = ["Karolinska Institutet", "Uppsala University", "Lund University", "Umeå University", "University of Gothenburg", "Swedish University of Agricultural Sciences", "International University", "Stockholm University", "KTH Royal Institute of Technology", "Linköping University", "Chalmers University of Technology", "Other Swedish University"];
+			var AcaUsrVal = [320, 219, 136, 136, 108, 94, 74, 67, 50, 38, 21, 20];
+			var AcaUsrTxt = ["Karolinska Institutet<br>25%", "Uppsala University<br>17%", "Lund University<br>11%", "Umeå University<br>11%", "University of Gothenburg<br>8%", "Swedish University of<br>Agricultural Sciences<br>7%", "International University<br>6%", "Stockholm University<br>5%", "KTH Royal Institute of Technology<br>4%", "Linköping University<br>3%", "Chalmers University of Technology<br>2%", "Other Swedish University<br>2%"];
+            var AcaUsrDat = {
+                             domain: {x:[0.27, 0.845], y:[0, 0.94]},
+                             outsidetextfont: {family: "Arial", size:26}
+                             };
+			makePieChart("academic-users-pie", AcaUsrArr, AcaUsrVal, AcaUsrTxt, AcaUsrDat, "Figure 11. Academic user distribution 2019");
+        
+		
+        };
+        
+	    /*
+		PLOTING FUNCTIONS
+		*/
+		
+        // Function to make pie charts
+        function makePieChart(divID, labArray, valArray, textArray, uData, fName="new_plot"){
+			var pieCol = ["#1E3F32", "#01646B", "#4f9b74", "#80C41C", "#1b918d", "378CAF", "#468365", "#AECE53", "#87B0AB", "#AEC69C", "#819e90", "#B1B0B1"];
+			
+            var data = [{
+                values: valArray,
+                labels: labArray,
+                type: "pie",
+                text: textArray,
+                textposition: "outside",
+                textinfo: "text",
+				outsidetextfont: {family: "Arial", size:23},
+                hoverinfo: "none",
+				domain: {x:[0.15, 0.85], y:[0, 1]},
+				hole: 0.70,
+                sort: true,
+                direction: "clockwise",
+                automargin: true,
+				marker: {colors: pieCol.slice(0, textArray.length)}
+            }];
+            
+            //Update or overwrite propperties if required
+            for (var prop in uData){
+                data[0][prop] = uData[prop]
+            }
+            
+            var layout = {
+                /*title: {
+					text: titleString,
+					font: {family: "Arial", size: 26},
+					x: 0.47,
+					y: 0.93
+				},*/
+				showlegend: false
+//				legend: {
+//					y: 0.83,
+//					orientation: "h"
+//				}
+            };
+            
+            Plotly.newPlot(divID, data, layout, Object.assign({toImageButtonOptions: { format: 'png', filename: fName, height: 959, width: 950, scale: 3}}, plotlyConfigPie));
+        };
+		
+    </script>
+    </head>
+    
+    <body>
+        <div>
+            <p class="title_head">Distribution of National Funding</p>
+            <br>
+		    <div id="national-fund-pie" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Allocation of National Funding to Swedish universities</p>
+            <br>
+		    <div id="university-fund-pie" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Distribution of National and DDD funding to platforms</p>
+            <br>
+		    <div id="platform-fund-pie" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Total funding of Infrastructure 2019(MSEK)</p>
+            <br>
+		    <div id="infra-fund-pie" class="square-plot"></div>
+        </div>
+        <div>
+            <p class="title_head">Academic users distribution 2019</p>
+            <br>
+		    <div id="academic-users-pie" class="square-plot"></div>
+        </div>
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.js"></script>
+               
+    </body>
+</html>
